@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Te AMO!</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts - Amatic SC para uma fonte romântica -->
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Amatic SC', cursive;
+            overflow: hidden; /* Evita barras de rolagem com o canvas */
+        }
+        .heart-icon {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .fade-in-up {
+            animation: fadeInUp 1.2s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message-container {
+            display: none;
+        }
+        #fireworks-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 50;
+            pointer-events: none; /* Permite que o usuário clique no conteúdo abaixo */
+        }
+    </style>
+</head>
+<body class="bg-red-900 text-white flex items-center justify-center min-h-screen transition-colors duration-500">
+
+    <!-- Canvas para os fogos de artifício -->
+    <canvas id="fireworks-canvas"></canvas>
+
+    <!-- Primeira tela - O Coração Clicável -->
+    <div id="intro-screen" class="text-center cursor-pointer p-4 rounded-xl transition-all duration-300 transform hover:scale-105">
+        <i class="fas fa-heart text-red-500 text-9xl md:text-[10rem] heart-icon drop-shadow-lg"></i>
+        <p class="mt-4 text-3xl md:text-5xl font-bold tracking-wider">Clique Aqui</p>
+    </div>
+
+    <!-- Segunda tela - A Mensagem Romântica (escondida por padrão) -->
+    <div id="message-screen" class="message-container text-center w-full max-w-2xl px-4 py-8 rounded-2xl bg-white bg-opacity-10 shadow-xl border-2 border-red-500 backdrop-blur-sm">
+        <div class="flex flex-col items-center justify-center space-y-8">
+            <h1 class="text-7xl md:text-8xl font-bold tracking-widest leading-tight text-red-400 fade-in-up">Eu Te Amo</h1>
+
+            <div class="flex space-x-4 fade-in-up" style="animation-delay: 0.5s;">
+                <i class="fas fa-heart text-5xl md:text-6xl text-red-500 drop-shadow-md"></i>
+                <i class="fas fa-hand-holding-heart text-5xl md:text-6xl text-red-500 drop-shadow-md"></i>
+                <i class="fas fa-star text-5xl md:text-6xl text-red-500 drop-shadow-md"></i>
+            </div>
+            
+            <p class="text-5xl md:text-6xl font-extrabold text-red-200 tracking-wider text-shadow-lg fade-in-up" style="animation-delay: 1s;">Alessandra</p>
+
+            <div class="rounded-xl overflow-hidden shadow-lg border-2 border-red-500 transform transition-transform duration-300 hover:scale-105 fade-in-up" style="animation-delay: 1.5s;">
+               
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const introScreen = document.getElementById('intro-screen');
+        const messageScreen = document.getElementById('message-screen');
+        const canvas = document.getElementById('fireworks-canvas');
+        const ctx = canvas.getContext('2d');
+        const fireworks = [];
+        const particles = [];
+
+        // Define a cor de fundo do canvas (transparente)
+        ctx.fillStyle = 'rgba(0, 0, 0, 0)';
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function Firework(x, y, targetX, targetY) {
+            this.x = x;
+            this.y = y;
+            this.targetX = targetX;
+            this.targetY = targetY;
+            this.speed = 10;
+            this.opacity = 1;
+            this.angle = Math.atan2(targetY - y, targetX - x);
+            this.vx = Math.cos(this.angle) * this.speed;
+            this.vy = Math.sin(this.angle) * this.speed;
+        }
+
+        Firework.prototype.update = function() {
+            this.x += this.vx;
+            this.y += this.vy;
+            this.opacity -= 0.01;
+        };
+
+        Firework.prototype.draw = function() {
+            ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+            ctx.fill();
+        };
+
+        function Particle(x, y, color) {
+            this.x = x;
+            this.y = y;
+            this.color = color;
+            this.size = Math.random() * 2 + 1;
+            this.angle = Math.random() * Math.PI * 2;
+            this.speed = Math.random() * 4 + 1;
+            this.vx = Math.cos(this.angle) * this.speed;
+            this.vy = Math.sin(this.angle) * this.speed;
+            this.gravity = 0.1;
+            this.alpha = 1;
+            this.decay = Math.random() * 0.015 + 0.005;
+        }
+
+        Particle.prototype.update = function() {
+            this.x += this.vx;
+            this.y += this.vy;
+            this.vy += this.gravity;
+            this.alpha -= this.decay;
+        };
+
+        Particle.prototype.draw = function() {
+            ctx.save();
+            ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        };
+
+        function createParticles(x, y, count, color) {
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+        
+        function animateFireworks() {
+            requestAnimationFrame(animateFireworks);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                fireworks[i].update();
+                fireworks[i].draw();
+
+                const distance = Math.sqrt(
+                    Math.pow(fireworks[i].x - fireworks[i].targetX, 2) +
+                    Math.pow(fireworks[i].y - fireworks[i].targetY, 2)
+                );
+
+                if (distance < 10 || fireworks[i].opacity <= 0) {
+                    const colors = ["255,105,180", "255,20,147", "255,0,0"]; // Rosa, Vermelho, Vermelho Escuro
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    createParticles(fireworks[i].x, fireworks[i].y, 50, color);
+                    fireworks.splice(i, 1);
+                }
+            }
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+        }
+
+        function launchFirework() {
+            const startX = canvas.width / 2;
+            const startY = canvas.height;
+            const targetX = Math.random() * canvas.width * 0.8 + canvas.width * 0.1;
+            const targetY = Math.random() * (canvas.height / 2) + 50;
+            fireworks.push(new Firework(startX, startY, targetX, targetY));
+        }
+
+        introScreen.addEventListener('click', () => {
+            introScreen.style.animation = 'fadeOut 0.8s ease-out forwards';
+            
+            setTimeout(() => {
+                introScreen.style.display = 'none';
+                messageScreen.style.display = 'block';
+                messageScreen.classList.add('fade-in-up');
+
+                // Inicia os fogos de artifício 2 segundos após a transição da tela
+                setTimeout(() => {
+                    animateFireworks();
+                    setInterval(launchFirework, 1500); // Lança um novo fogo a cada 1.5s
+                }, 1000); // 2 segundos de atraso
+            }, 800); 
+        });
+    </script>
+</body>
+</html>
