@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TE AMO !</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts - Inter para uma fonte mais legível -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #8B0000; /* Vermelho escuro forte */
+        }
+        .heart-icon-bouncing {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .message-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            min-height: 100vh;
+            width: 100%;
+        }
+        .fade-in {
+            animation: fadeIn 1.5s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .heart-beat {
+            animation: heartbeat 1s infinite;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1.1); }
+            75% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .name-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #8B0000;
+        }
+        .heart-with-name {
+            position: relative;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="bg-red-900 text-white flex items-center justify-center min-h-screen">
+
+    <!-- Primeira tela - Coração Clicável -->
+    <div id="intro-screen" class="relative text-center cursor-pointer p-8 rounded-3xl shadow-xl border-2 border-red-400 bg-red-800 bg-opacity-80 transition-all duration-500 transform hover:scale-105">
+        <div class="rounded-full flex items-center justify-center w-64 h-64 mx-auto mb-6 border-4 border-red-600 relative bg-red-700">
+            <i class="fas fa-heart text-red-400 text-6xl heart-icon-bouncing"></i>
+        </div>
+        <p class="mt-4 text-3xl md:text-5xl font-bold">Clique no Coração</p>
+    </div>
+
+    <!-- Segunda tela - Mensagem Romântica -->
+    <div id="romantic-screen" class="message-container bg-red-800 bg-opacity-80 shadow-2xl border-2 border-red-600 backdrop-blur-sm fade-in">
+        <div class="space-y-6">
+            <p class="text-4xl md:text-5xl text-red-200">
+                Meu amor, você é a razão do meu sorriso,
+            </p>
+            <p class="text-3xl md:text-4xl text-red-400">
+                minha inspiração e a melhor parte da minha vida.
+            </p>
+            <p class="text-6xl md:text-7xl font-extrabold text-red-200 tracking-wider mt-8">
+                Eu Te Amo, Alessandra
+            </p>
+        </div>
+    </div>
+
+    <!-- Terceira tela - "Espere..." -->
+    <div id="waiting-screen" class="message-container bg-red-800 bg-opacity-80 shadow-2xl border-2 border-red-600 backdrop-blur-sm fade-in">
+        <i class="fas fa-hand-paper text-6xl text-white mb-4 animate-pulse"></i>
+        <p class="text-4xl md:text-5xl font-bold">Espere...</p>
+    </div>
+
+    <!-- Quarta tela - Mensagem engraçada -->
+    <div id="chata-screen" class="message-container bg-red-800 bg-opacity-80 shadow-2xl border-2 border-red-600 backdrop-blur-sm fade-in">
+        <div class="space-y-6">
+            <p class="text-3xl md:text-4xl text-red-400">
+                Você é chata demais, briga toda hora, discute por nada,
+            </p>
+            <p class="text-3xl md:text-4xl text-red-400">
+                mas é a mulher da minha vida. <i class="far fa-smile-wink text-red-400 ml-2"></i>
+            </p>
+        </div>
+    </div>
+
+    <!-- Quinta tela - Coração com nome -->
+    <div id="final-screen" class="message-container bg-red-800 bg-opacity-80 shadow-2xl border-2 border-red-600 backdrop-blur-sm fade-in">
+        <div class="heart-with-name">
+            <i class="fas fa-heart text-9xl text-red-400 heart-beat"></i>
+            <span class="name-container">Alessandra</span>
+        </div>
+    </div>
+
+    <script>
+        const introScreen = document.getElementById('intro-screen');
+        const romanticScreen = document.getElementById('romantic-screen');
+        const waitingScreen = document.getElementById('waiting-screen');
+        const chataScreen = document.getElementById('chata-screen');
+        const finalScreen = document.getElementById('final-screen');
+
+        introScreen.addEventListener('click', () => {
+            introScreen.style.display = 'none';
+            romanticScreen.style.display = 'flex';
+            
+            // Vai para a tela de "Espere..." após 5 segundos
+            setTimeout(() => {
+                romanticScreen.style.display = 'none';
+                waitingScreen.style.display = 'flex';
+            }, 5000);
+
+            // Vai para a tela da mensagem "chata" após 10 segundos (5 + 5)
+            setTimeout(() => {
+                waitingScreen.style.display = 'none';
+                chataScreen.style.display = 'flex';
+            }, 10000);
+
+            // Vai para a tela final após 15 segundos (10 + 5)
+            setTimeout(() => {
+                chataScreen.style.display = 'none';
+                finalScreen.style.display = 'flex';
+            }, 15000);
+        });
+    </script>
+</body>
+</html>
