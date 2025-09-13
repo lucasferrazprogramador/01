@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALERTA DE SEGURANÇA</title>
+    <style>
+        /* Estilos Globais */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+            color: #00ff00;
+            font-family: 'Fira Code', 'Roboto Mono', monospace;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Animação de pulsação de texto */
+        @keyframes pulse {
+            0% { text-shadow: 0 0 5px #00ff00; }
+            50% { text-shadow: 0 0 15px #00ff00, 0 0 25px rgba(0, 255, 0, 0.5); }
+            100% { text-shadow: 0 0 5px #00ff00; }
+        }
+
+        /* Animação para o cursor piscando */
+        @keyframes blinker {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Animação para a falha/glitch */
+        @keyframes glitch {
+            0% { transform: skewX(1deg); }
+            5% { transform: skewX(-1deg); }
+            10% { transform: skewX(0.5deg); }
+            15% { transform: skewX(-0.5deg); }
+            20% { transform: skewX(0.2deg); }
+            25% { transform: skewX(-0.2deg); }
+            30% { transform: skewX(0); }
+        }
+
+        /* Contêiner da simulação */
+        .simulation-container {
+            width: 95%;
+            max-width: 900px;
+            height: 90%;
+            max-height: 600px;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Mensagem de status inicial */
+        .status-message {
+            text-align: center;
+            font-size: 1.5em;
+            letter-spacing: 2px;
+        }
+
+        /* Logs do processo de invasão */
+        .terminal-log {
+            flex: 1;
+            margin-top: 20px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #00ff00 #1a1a1a;
+        }
+        
+        .terminal-log::-webkit-scrollbar {
+            width: 8px;
+        }
+        .terminal-log::-webkit-scrollbar-thumb {
+            background-color: #00ff00;
+            border-radius: 4px;
+        }
+        .terminal-log::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        .log-line {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .log-line.show {
+            opacity: 1;
+        }
+
+        /* Cores e estilos de log */
+        .log-info { color: #00ffff; }
+        .log-command { color: #00bfff; }
+        .log-success { color: #00ff00; }
+        .log-warning { color: #ffc107; }
+        .log-error { color: #dc3545; }
+
+        /* Mensagem final de invasão */
+        .compromised-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .compromised-overlay.active {
+            opacity: 1;
+        }
+
+        .compromised-message {
+            font-size: 4em;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            animation: pulse 1s infinite ease-in-out;
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        .compromised-text {
+            font-size: 1.5em;
+            margin-top: 20px;
+            color: #ff0000;
+            text-shadow: 0 0 5px #ff0000;
+        }
+
+        /* Efeito de glitch no final */
+        .glitch-effect {
+            animation: glitch 0.5s infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="simulation-container" id="simulationContainer">
+        <div class="status-message" id="statusMessage">
+            <span>Sistema online. Aguardando comandos</span><span class="blinker cursor">_</span>
+        </div>
+        <div class="terminal-log" id="terminalLog"></div>
+        
+        <div class="compromised-overlay" id="compromisedOverlay">
+            <h1 class="compromised-message">HACKEADO !!!</h1>
+            <p class="compromised-text">ACESSO DE NEGADO, SEUS DADOS FORAM ROUBADOS.</p>
+        </div>
+    </div>
+
+    <script>
+        const statusMessage = document.getElementById('statusMessage');
+        const terminalLog = document.getElementById('terminalLog');
+        const simulationContainer = document.getElementById('simulationContainer');
+        const compromisedOverlay = document.getElementById('compromisedOverlay');
+        
+        // As linhas do log que simulam a invasão
+        const logLines = [
+            '<span class="log-info">[ INFO ]</span> Inicializando varredura de portas...',
+            '<span class="log-info">[ INFO ]</span> Tentando autenticação anônima...',
+            '<span class="log-warning">[ WARN ]</span> Acesso negado ao diretório /dev/null.',
+            '<span class="log-info">[ INFO ]</span> Executando ataque de força bruta no serviço SSH...',
+            '<span class="log-command">[ COMMAND ]</span> root@127.0.0.1:~$ ssh root@10.0.0.2',
+            '<span class="log-error">[ ERROR ]</span> Conexão recusada. Tentando nova rota...',
+            '<span class="log-info">[ INFO ]</span> Exploits encontrados. Explorando falha de buffer overflow...',
+            '<span class="log-success">[ SUCCESS ]</span> Privilégios de superusuário adquiridos.',
+            '<span class="log-command">[ COMMAND ]</span> root@aegis-core:~$ rm -rf /*',
+            '<span class="log-info">[ INFO ]</span> Acesso total à rede. Sincronizando datacores...',
+            '<span class="log-warning">[ WARN ]</span> Firewall desativado.',
+            '<span class="log-info">[ INFO ]</span> Coleta de dados iniciada.',
+            '<span class="log-success">[ SUCCESS ]</span> Dados do sistema principal transferidos.',
+            '<span class="log-error">[ ERROR ]</span> Criptografia em andamento...',
+            '<span class="log-error">[ ERROR ]</span> Desligamento forçado iniciado.',
+            'SISTEMA FORA DE CONTROLE'
+        ];
+
+        let lineIndex = 0;
+
+        function showNextLog() {
+            if (lineIndex < logLines.length) {
+                const line = document.createElement('div');
+                line.className = 'log-line';
+                line.innerHTML = logLines[lineIndex];
+                terminalLog.appendChild(line);
+
+                setTimeout(() => {
+                    line.classList.add('show');
+                    terminalLog.scrollTop = terminalLog.scrollHeight;
+                }, 50);
+
+                lineIndex++;
+                const delay = Math.random() * 200 + 100;
+                setTimeout(showNextLog, delay);
+            } else {
+                // Invasão completa, mostrar mensagem final
+                setTimeout(() => {
+                    simulationContainer.classList.add('glitch-effect');
+                    compromisedOverlay.classList.add('active');
+                }, 1000);
+            }
+        }
+
+        // Inicia a simulação após 2 segundos para dar tempo de ler a mensagem inicial
+        setTimeout(() => {
+            statusMessage.style.display = 'none';
+            showNextLog();
+        }, 2000);
+    </script>
+</body>
+</html>
