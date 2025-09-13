@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Aniversário, Vovó Lóide!</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+        body {
+            background-color: #fce4ec;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Efeitos de fundo: Flores e corações flutuantes */
+        .floating-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Garante que os elementos flutuantes não interfiram com o clique do mouse */
+        }
+        
+        .floating-element {
+            position: absolute;
+            bottom: -50px; /* Começa abaixo da tela */
+            font-size: 30px;
+            opacity: 0;
+            animation-name: floatUp;
+            animation-iteration-count: infinite;
+        }
+
+        /* Animação para os elementos flutuantes */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg); /* Move para cima e gira */
+                opacity: 0;
+            }
+        }
+        
+        /* Aplicações de animações variadas para um efeito mais natural */
+        .floating-element:nth-child(2n+1) {
+            animation-duration: 20s;
+            animation-delay: 1s;
+        }
+        .floating-element:nth-child(3n+2) {
+            animation-duration: 25s;
+            animation-delay: 3s;
+        }
+        .floating-element:nth-child(5n) {
+            animation-duration: 18s;
+            animation-delay: 5s;
+        }
+        .floating-element:nth-child(7n+4) {
+            animation-duration: 22s;
+            animation-delay: 7s;
+        }
+
+        .carta-aniversario {
+            background-color: #ffebee;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+            max-width: 500px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .conteudo-carta h2 {
+            color: #e53935;
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .conteudo-carta p {
+            color: #4a148c;
+            font-size: 1.5em;
+            margin-bottom: 30px;
+        }
+
+        #abrir-carta-btn {
+            background-color: #e53935;
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            font-size: 1.4em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: pulse 1.5s infinite alternate; /* O botão continua pulsando */
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+
+        .mensagens-container {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 800px;
+            height: 100%;
+            z-index: 5;
+        }
+
+        .mensagem {
+            color: #e53935;
+            font-size: 2.5em;
+            margin: 20px 0;
+            opacity: 0;
+            transition: opacity 2.5s ease-in-out;
+            position: absolute;
+            width: 100%;
+        }
+
+        #coracao-final {
+            font-size: 10em;
+            margin-top: 40px;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            position: relative;
+            animation: final-pulse 1.8s infinite alternate; /* O coração final pulsa */
+            color: #e53935;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes final-pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        #coracao-final span {
+            position: absolute;
+            font-family: 'Great Vibes', cursive;
+            font-size: 0.3em;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="floating-container">
+        <span class="floating-element" style="left: 10%;">❤️</span>
+        <span class="floating-element" style="left: 20%;">❀</span>
+        <span class="floating-element" style="left: 30%;">❤️</span>
+        <span class="floating-element" style="left: 40%;">❀</span>
+        <span class="floating-element" style="left: 50%;">❤️</span>
+        <span class="floating-element" style="left: 60%;">❀</span>
+        <span class="floating-element" style="left: 70%;">❤️</span>
+        <span class="floating-element" style="left: 80%;">❀</span>
+        <span class="floating-element" style="left: 90%;">❤️</span>
+        <span class="floating-element" style="left: 5%;">❀</span>
+        <span class="floating-element" style="left: 15%;">❤️</span>
+        <span class="floating-element" style="left: 25%;">❀</span>
+        <span class="floating-element" style="left: 35%;">❤️</span>
+        <span class="floating-element" style="left: 45%;">❀</span>
+    </div>
+
+    <div class="carta-aniversario">
+        <div class="conteudo-carta">
+            <h2>🎉 Feliz Aniversário! 🎉</h2>
+            <p>Clique no botão para abrir esta carta especial para você!</p>
+            <button id="abrir-carta-btn">Abrir Carta</button>
+        </div>
+    </div>
+
+    <div class="mensagens-container">
+        <p id="mensagem1" class="mensagem">Minha amada Vovó Lóide,</p>
+        <p id="mensagem2" class="mensagem">Hoje celebramos a sua vida, cheia de sabedoria e amor!</p>
+        <p id="mensagem3" class="mensagem">Que a alegria, a paz e a saúde a acompanhem sempre.</p>
+        <p id="mensagem4" class="mensagem">Obrigado por tudo que a Senhora fez e faz por nós!</p>
+        <div id="coracao-final" class="coracao">❤️<span>Lóide</span></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const abrirCartaBtn = document.getElementById('abrir-carta-btn');
+            const cartaAniversario = document.querySelector('.carta-aniversario');
+            const mensagensContainer = document.querySelector('.mensagens-container');
+            const mensagens = document.querySelectorAll('.mensagem');
+            const coracaoFinal = document.getElementById('coracao-final');
+        
+            abrirCartaBtn.addEventListener('click', () => {
+                cartaAniversario.style.opacity = '0';
+                cartaAniversario.style.transform = 'scale(0.7)';
+        
+                setTimeout(() => {
+                    cartaAniversario.style.display = 'none';
+                    mensagensContainer.style.display = 'flex';
+                    
+                    let delay = 0;
+                    mensagens.forEach((msg, index) => {
+                        setTimeout(() => {
+                            if (index > 0) {
+                                mensagens[index - 1].style.opacity = '0';
+                            }
+                            msg.style.opacity = '1';
+                        }, delay);
+                        delay += 4000;
+                    });
+        
+                    setTimeout(() => {
+                        mensagens[mensagens.length - 1].style.opacity = '0';
+                        coracaoFinal.style.opacity = '1';
+                    }, delay);
+        
+                }, 1000);
+            });
+        });
+    </script>
+
+</body>
+</html>
